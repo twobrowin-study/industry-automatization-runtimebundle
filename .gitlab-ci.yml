@@ -1,4 +1,4 @@
-image: twobrowin/runners:alpine-kubectl-buildah-envsubst
+image: twobrowin/runners:alpine-kubectl-buildah-envsubst-mvn
 
 stages:
 - build
@@ -9,7 +9,7 @@ stages:
 build:
   stage: build
   script:
-  - ./mvnw compile package
+  - mvn compile package
   artifacts:
     paths:
     - target/*.jar
