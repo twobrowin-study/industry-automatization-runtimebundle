@@ -1,4 +1,4 @@
-image: twobrowin/runners:alpine-kubectl-buildah-envsubst-jdk11
+image: twobrowin/runners:fedora-kubectl-buildah-envsubst-jdk11
 
 stages:
 - build
