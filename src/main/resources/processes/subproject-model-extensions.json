@@ -1,0 +1,61 @@
+{
+    "id": "Process_i5ugxdvpu",
+    "name": "subproject-model.bpmn20.xml",
+    "extensions":
+    {
+        "Process_i5ugxdvpu": {
+            "constants": {},
+            "mappings": {
+                "Task_0vukmom": {
+                    "inputs": {
+                        "initiator_group": {
+                            "type": "variable",
+                            "value": "initiator_group"
+                        },
+                        "name": {
+                            "type": "variable",
+                            "value": "creation_name"
+                        }
+                    }
+                }
+            },
+            "properties": {
+                "37ba8e48-11d7-4bec-8b87-61c9d030800f": {
+                    "id": "37ba8e48-11d7-4bec-8b87-61c9d030800f",
+                    "name": "initiator_group",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                },
+                "5d910bd5-362e-411a-9660-8caec896864f": {
+                    "id": "5d910bd5-362e-411a-9660-8caec896864f",
+                    "name": "close_subproject",
+                    "type": "boolean",
+                    "required": true,
+                    "value": false
+                },
+                "72098cdb-7a55-4665-8b7f-40acb2846d3f": {
+                    "id": "72098cdb-7a55-4665-8b7f-40acb2846d3f",
+                    "name": "creation_name",
+                    "type": "string",
+                    "value": "<Безымянный>",
+                    "required": false
+                },
+                "872768a2-0fb6-4748-a68a-2cb83111e560": {
+                    "id": "872768a2-0fb6-4748-a68a-2cb83111e560",
+                    "name": "name",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                }
+            },
+            "assignments": {
+                "Task_03l7jgz": {
+                    "type": "expression",
+                    "assignment": "candidates",
+                    "id": "Task_03l7jgz"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runtimebundle
+spec:
+  selector:
+    matchLabels:
+      app: runtimebundle                                   
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: runtimebundle
+    spec:
+      containers:
+      - image: ${DOCKER_PULL_REGISTRY}/runtimebundle:${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}
+        name: runtimebundle
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_JMX_ENABLED
+          value: "false"
+        - name: SPRING_RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: ACT_KEYCLOAK_URL
+          value: "http://${PUBLIC_IP}/auth"
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://localhost:5432/activitidb"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "activiti"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "mypassword"
+        - name: SPRING_JPA_DATABASE_PLATFORM
+          value: "org.hibernate.dialect.PostgreSQLDialect"
+        - name: SPRING_JPA_GENERATE_DDL
+          value: "true"
+        - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+          value: "update"
+        - name: SERVER_SERVLET_CONTEXT_PATH
+          value: "/rb"
+      - image: postgres:latest
+        name: postgres
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "mypassword"
+        - name: POSTGRES_USER
+          value: "activiti"
+        - name: POSTGRES_DB
+          value: "activitidb"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: runtimebundle
+spec:
+  selector:
+    app: runtimebundle
+  ports:
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: runtimebundle
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
+    nginx.ingress.kubernetes.io/proxy-buffers: "64k"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers: "64k"
+    nginx.ingress.kubernetes.io/fastcgi-buffer-size: "32k"
+    nginx.ingress.kubernetes.io/fastcgi-buffers: "4"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /rb/
+        pathType: Prefix
+        backend:
+          service:
+            name: runtimebundle
+            port:
+              number: 8080

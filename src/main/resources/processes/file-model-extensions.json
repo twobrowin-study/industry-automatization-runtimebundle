@@ -1,0 +1,41 @@
+{
+    "id": "Process_t1-1M1g1T",
+    "name": "file-model.bpmn20.xml",
+    "extensions":
+    {
+        "Process_t1-1M1g1T": {
+            "constants": {},
+            "mappings": {},
+            "properties": {
+                "2768c36b-1ba4-43a4-b917-dcbd51d40c1b": {
+                    "id": "2768c36b-1ba4-43a4-b917-dcbd51d40c1b",
+                    "name": "close_file",
+                    "type": "boolean",
+                    "value": false,
+                    "required": true
+                },
+                "c1c848ec-df6f-4c60-8cf2-96f6427c55f3": {
+                    "id": "c1c848ec-df6f-4c60-8cf2-96f6427c55f3",
+                    "name": "initiator_group",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                },
+                "bf67aa68-cccd-4c74-b61b-9ce16f27cbe7": {
+                    "id": "bf67aa68-cccd-4c74-b61b-9ce16f27cbe7",
+                    "name": "name",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                }
+            },
+            "assignments": {
+                "Task_0ebhksp": {
+                    "type": "expression",
+                    "assignment": "candidates",
+                    "id": "Task_0ebhksp"
+                }
+            }
+        }
+    }
+}

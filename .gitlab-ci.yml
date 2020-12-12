@@ -1,0 +1,36 @@
+image: twobrowin/runners:alpine-kubectl-buildah-envsubst
+
+stages:
+- build
+- buildah
+- envsubst
+- deploy
+
+build:
+  stage: build
+  script:
+  - ./mvnw compile package
+  artifacts:
+    paths:
+    - target/*.jar
+    expire_in: 30 minutes
+
+buildah:
+  stage: buildah
+  script:
+  - buildah --storage-driver=vfs bud -t $DOCKER_PUSH_REGISTRY/runtimebundle:${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA} .
+  - buildah push --storage-driver=vfs --tls-verify=false --creds $DOCKER_PUSH_CREDS $DOCKER_PUSH_REGISTRY/runtimebundle:${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}
+
+envsubst:
+  stage: envsubst
+  script:
+  - envsubst -i runtimebundle.yaml -o runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
+  artifacts:
+    paths:
+    - runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
+    expire_in: 30 minutes
+
+deploy:
+  stage: deploy
+  script:
+  - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml

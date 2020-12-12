@@ -1,0 +1,80 @@
+{
+    "id": "Process_BKx8PFXad",
+    "name": "project-model.bpmn20.xml",
+    "extensions":
+    {
+        "Process_BKx8PFXad": {
+            "constants": {},
+            "mappings": {
+                "Task_0i1qr2k": {
+                    "inputs": {
+                        "initiator_group": {
+                            "type": "variable",
+                            "value": "initiator_group"
+                        },
+                        "name": {
+                            "type": "variable",
+                            "value": "creation_name"
+                        }
+                    }
+                },
+                "Task_1hw9wi1": {
+                    "inputs": {
+                        "initiator_group": {
+                            "type": "variable",
+                            "value": "initiator_group"
+                        },
+                        "name": {
+                            "type": "variable",
+                            "value": "creation_name"
+                        }
+                    }
+                }
+            },
+            "properties": {
+                "e22272c0-4ad1-4319-af3a-f85753f28b4c": {
+                    "id": "e22272c0-4ad1-4319-af3a-f85753f28b4c",
+                    "name": "initiator_group",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                },
+                "39ac7461-5844-4153-92e4-585c590ffac5": {
+                    "id": "39ac7461-5844-4153-92e4-585c590ffac5",
+                    "name": "close_project",
+                    "type": "boolean",
+                    "value": false,
+                    "required": true
+                },
+                "0b6f459b-907d-49eb-bdb5-307f0c125668": {
+                    "id": "0b6f459b-907d-49eb-bdb5-307f0c125668",
+                    "name": "name",
+                    "type": "string",
+                    "value": "",
+                    "required": true
+                },
+                "32ad0b4e-c50f-4d90-8641-26335d5f5a90": {
+                    "id": "32ad0b4e-c50f-4d90-8641-26335d5f5a90",
+                    "name": "creation_name",
+                    "type": "string",
+                    "value": "<Безымянный>",
+                    "required": false
+                },
+                "3951624a-50de-492c-80a5-1833ef686040": {
+                    "id": "3951624a-50de-492c-80a5-1833ef686040",
+                    "name": "creation_type",
+                    "type": "string",
+                    "required": false,
+                    "value": "file"
+                }
+            },
+            "assignments": {
+                "Task_0wtw2gj": {
+                    "type": "expression",
+                    "assignment": "candidates",
+                    "id": "Task_0wtw2gj"
+                }
+            }
+        }
+    }
+}
