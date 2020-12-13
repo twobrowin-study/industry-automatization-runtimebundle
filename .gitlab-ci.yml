@@ -2,7 +2,7 @@ stages:
 - build
 - buildah
 - envsubst
-- deploy
+- kubectl
 
 build:
   image: twobrowin/gitlab-runners:openjdk11
@@ -31,8 +31,8 @@ envsubst:
     - runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
     expire_in: 30 minutes
 
-deploy:
+kubectl:
   image: twobrowin/gitlab-runners:kubectl
-  stage: deploy
+  stage: kubectl
   script:
   - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml

@@ -26,7 +26,7 @@
     <maven.compiler.release>${java.release}</maven.compiler.release>
     <maven.compiler.source>${java.release}</maven.compiler.source>
     <maven.compiler.target>${java.release}</maven.compiler.target>
-    <activiti-cloud.version>7.1.0-M10</activiti-cloud.version>
+    <activiti-cloud.version>${env.ACT_QUERY_VERSION}</activiti-cloud.version>
     <docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
     <year>2020</year>
     <skipTests>true</skipTests>
