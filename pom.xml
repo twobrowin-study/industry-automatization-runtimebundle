@@ -29,6 +29,7 @@
     <activiti-cloud.version>7.1.0-M10</activiti-cloud.version>
     <docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
     <year>2020</year>
+    <skipTests>true</skipTests>
   </properties>
   <repositories>
     <repository>
