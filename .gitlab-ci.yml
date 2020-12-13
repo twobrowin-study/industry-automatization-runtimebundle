@@ -5,7 +5,7 @@ stages:
 - deploy
 
 build:
-  image: twobrowin/runners:alpine-kubectl-buildah-envsubst-jdk11
+  image: twobrowin/gitlab-runners:openjdk11
   stage: build
   script:
   - ./mvnw compile package
@@ -15,14 +15,14 @@ build:
     expire_in: 30 minutes
 
 buildah:
-  image: twobrowin/runners:alpine-kubectl-buildah-envsubst-jdk11
+  image: twobrowin/gitlab-runners:buildah
   stage: buildah
   script:
   - buildah --storage-driver=vfs bud -t $DOCKER_PUSH_REGISTRY/runtimebundle:${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA} .
   - buildah push --storage-driver=vfs --tls-verify=false --creds $DOCKER_PUSH_CREDS $DOCKER_PUSH_REGISTRY/runtimebundle:${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}
 
 envsubst:
-  image: twobrowin/runners:alpine-kubectl-buildah-envsubst-jdk11
+  image: twobrowin/gitlab-runners:envsubs
   stage: envsubst
   script:
   - envsubst -i runtimebundle.yaml -o runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
@@ -32,7 +32,7 @@ envsubst:
     expire_in: 30 minutes
 
 deploy:
-  image: twobrowin/runners:alpine-kubectl-buildah-envsubst-jdk11
+  image: twobrowin/gitlab-runners:kubectl
   stage: deploy
   script:
   - kubectl --kubeconfig $KUBECTL_CONFIG --token $KUBECTL_USER_TOCKEN apply --record -f runtimebundle-${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}.yaml
