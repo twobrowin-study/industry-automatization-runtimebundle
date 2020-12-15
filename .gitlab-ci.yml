@@ -1,8 +1,15 @@
 stages:
+- test
 - build
 - buildah
 - envsubst
 - kubectl
+
+test:
+  image: twobrowin/gitlab-runners:openjdk11
+  stage: test
+  script:
+  - ./mvnw test
 
 build:
   image: twobrowin/gitlab-runners:openjdk11

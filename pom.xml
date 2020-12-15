@@ -11,7 +11,7 @@
   <groupId>org.activiti.cloud</groupId>
   <artifactId>runtimebundle</artifactId>
   <name>Activiti Cloud :: Runtime Bundle</name>
-  <description>Activiti Cloud :: Runtime Bundle</description>
+  <description>Set of immutable and executable BPMN models</description>
   <version>0.50.0</version>
   <url>http://activiti.org</url>
   <inceptionYear>2017</inceptionYear>
@@ -20,16 +20,14 @@
     <url>https://www.alfresco.com</url>
   </organization>
   <properties>
-    <maven.deploy.skip>true</maven.deploy.skip>
+    <year>2020</year>
     <java.release>11</java.release>
     <java.version>1.${java.release}</java.version>
     <maven.compiler.release>${java.release}</maven.compiler.release>
     <maven.compiler.source>${java.release}</maven.compiler.source>
     <maven.compiler.target>${java.release}</maven.compiler.target>
-    <activiti-cloud.version>${env.ACT_VERSION}</activiti-cloud.version>
-    <docker-maven-plugin.version>0.33.0</docker-maven-plugin.version>
-    <year>2020</year>
-    <skipTests>true</skipTests>
+<!--    <activiti-cloud.version>${env.ACT_VERSION}</activiti-cloud.version>-->
+    <activiti-cloud.version>7.1.0-M10</activiti-cloud.version>
   </properties>
   <repositories>
     <repository>
@@ -65,6 +63,13 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+    <!--Basic Suite-->
+    <dependency>
+      <groupId>org.activiti.cloud</groupId>
+      <artifactId>activiti-cloud-runtime-bundle-dependencies</artifactId>
+      <version>${activiti-cloud.version}</version>
+      <type>pom</type>
+    </dependency>
     <dependency>
       <groupId>org.activiti.cloud</groupId>
       <artifactId>activiti-cloud-starter-runtime-bundle</artifactId>
@@ -77,19 +82,25 @@
       <groupId>org.activiti.cloud</groupId>
       <artifactId>activiti-cloud-starter-messages-jdbc</artifactId>
     </dependency>
+    <!--Basic Suite End-->
+
+    <!--Runtime Suite-->
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-       <scope>test</scope>
-    </dependency>
+    <!--Runtime Suite End-->
+
+    <!--Test Suite-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -97,122 +108,25 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!-- Marker Pom for Dependency Conversion Validation  -->
     <dependency>
-      <groupId>org.activiti.cloud</groupId>
-      <artifactId>activiti-cloud-runtime-bundle-dependencies</artifactId>
-      <version>${activiti-cloud.version}</version>
-      <type>pom</type>
+      <groupId>com.github.fridujo</groupId>
+      <artifactId>rabbitmq-mock</artifactId>
+      <version>1.1.1</version>
+      <scope>test</scope>
     </dependency>
-    <!-- Marker Pom for Dependency Conversion Validation  -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--Test Suite End-->
   </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build-info</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
-    <profiles>
-    <profile>
-      <id>integration-test</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>skipITs</name>
-          <value>false</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>${maven-failsafe-plugin.version}</version>
-            <configuration>
-              <forkCount>0</forkCount>
-              <useSystemClassLoader>false</useSystemClassLoader>
-            </configuration>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>docker-maven-plugin</artifactId>
-            <version>${docker-maven-plugin.version}</version>
-            <configuration>
-              <images>
-                <image>
-                  <name>activiti/activiti-keycloak</name>
-                  <alias>activiti-keycloak</alias>
-                  <run>
-                    <ports>
-                      <port>8180:8180</port>
-                    </ports>
-                    <wait>
-                      <log>Keycloak .* started in</log>
-                      <time>40000</time>
-                      <shutdown>5000</shutdown>
-                      <kill>1000</kill>
-                    </wait>
-                  </run>
-                </image>
-                <image>
-                  <name>rabbitmq:management</name>
-                  <alias>activiti-rabbitmq</alias>
-                  <run>
-                    <ports>
-                      <port>5672:5672</port>
-                      <port>15672:15672</port>
-                    </ports>
-                    <wait>
-                      <log>Server startup complete</log>
-                      <time>20000</time>
-                      <shutdown>3000</shutdown>
-                      <kill>1000</kill>
-                    </wait>
-                  </run>
-                </image>
-              </images>
-              <skip>${skipTests}</skip>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>start</goal>
-                  <goal>stop</goal>
-                  <goal>remove</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>mock-spring-cloud-stream</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.springframework.cloud</groupId>
-          <artifactId>spring-cloud-stream-test-support</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 </project>

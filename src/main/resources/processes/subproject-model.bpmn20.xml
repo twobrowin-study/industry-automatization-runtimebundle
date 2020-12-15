@@ -18,7 +18,7 @@
       <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${close_subproject == true}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="SequenceFlow_1h1eqi1" sourceRef="ExclusiveGateway_0re4ywr" targetRef="Task_03l7jgz" />
-    <bpmn2:userTask id="Task_03l7jgz" name="Создат" activiti:candidateGroups="${initiator_group}">
+    <bpmn2:userTask id="Task_03l7jgz" name="Создать" activiti:candidateGroups="${initiator_group}">
       <bpmn2:incoming>SequenceFlow_1h1eqi1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_1u3kd98</bpmn2:outgoing>
       <bpmn2:outgoing>SequenceFlow_11u6jfe</bpmn2:outgoing>
